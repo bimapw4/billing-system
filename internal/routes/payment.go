@@ -10,4 +10,5 @@ import (
 func PaymentRoutes(app *fiber.App, handler handlers.Handlers, middleware *middleware.Authentication) {
 	app.Post("/payment", handler.Payment.PaymentHandler)
 	app.Get("/payment", handler.Payment.ListHandler)
+	app.Get("/payment/status/:id", handler.Payment.Status)
 }

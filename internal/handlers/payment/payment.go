@@ -16,6 +16,7 @@ import (
 type Handler interface {
 	PaymentHandler(c *fiber.Ctx) error
 	ListHandler(c *fiber.Ctx) error
+	Status(c *fiber.Ctx) error
 }
 
 type handler struct {
@@ -58,6 +59,10 @@ func (h *handler) PaymentHandler(c *fiber.Ctx) error {
 	if err != nil {
 		fmt.Println("err ", err)
 		err := errorCust.GetError(err)
+
+		if res.Deliquent {
+			err.Message += fmt.Sprint(", you must pay ", res.DeliquentAmount)
+		}
 		return response.NewResponse(Entity).
 			Errors("Failed to update payment", err.Message).
 			JSON(c, err.Code)
@@ -91,5 +96,27 @@ func (h *handler) ListHandler(c *fiber.Ctx) error {
 
 	return response.NewResponse(Entity).
 		SuccessWithMeta("List Payment successfully", res, m).
+		JSON(c, fiber.StatusCreated)
+}
+
+func (h *handler) Status(c *fiber.Ctx) error {
+
+	var (
+		Entity = "ListPayment"
+	)
+	availError := common.DefaultAvailableErrors()
+	errorCust := availError.CustomeError(common.AvailableErrors{})
+
+	res, err := h.business.Payment.Status(c.UserContext(), c.Params("id"))
+	if err != nil {
+		fmt.Println("err", err)
+		err := errorCust.GetError(err)
+		return response.NewResponse(Entity).
+			Errors("Failed to status payment", err.Message).
+			JSON(c, err.Code)
+	}
+
+	return response.NewResponse(Entity).
+		Success("Status Payment successfully", res).
 		JSON(c, fiber.StatusCreated)
 }
