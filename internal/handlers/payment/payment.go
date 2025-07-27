@@ -96,7 +96,7 @@ func (h *handler) ListHandler(c *fiber.Ctx) error {
 
 	return response.NewResponse(Entity).
 		SuccessWithMeta("List Payment successfully", res, m).
-		JSON(c, fiber.StatusCreated)
+		JSON(c, fiber.StatusOK)
 }
 
 func (h *handler) Status(c *fiber.Ctx) error {
@@ -118,5 +118,5 @@ func (h *handler) Status(c *fiber.Ctx) error {
 
 	return response.NewResponse(Entity).
 		Success("Status Payment successfully", res).
-		JSON(c, fiber.StatusCreated)
+		JSON(c, fiber.StatusOK)
 }
