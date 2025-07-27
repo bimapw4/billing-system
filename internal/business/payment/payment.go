@@ -7,7 +7,6 @@ import (
 	"billing/internal/repositories"
 	"billing/pkg/meta"
 	"context"
-	"fmt"
 	"time"
 )
 
@@ -54,8 +53,6 @@ func (b *business) Payment(ctx context.Context, payload *entity.Payment) (*prese
 
 	fixinstallment := len(unpaidWeeks) * installments
 
-	fmt.Println(fixinstallment)
-
 	if fixinstallment != payload.Payment {
 		return &presentations.RespPayment{
 			Deliquent:       isDeliquent,
@@ -68,7 +65,7 @@ func (b *business) Payment(ctx context.Context, payload *entity.Payment) (*prese
 			Payment: presentations.Payment{
 				Week:      v,
 				LoanID:    payload.LoanID,
-				Paid:      payload.Payment,
+				Paid:      payload.Payment / len(unpaidWeeks),
 				IsPaid:    true,
 				PaidAt:    &payload.Date,
 				UpdatedAt: time.Now(),
