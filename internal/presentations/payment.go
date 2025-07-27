@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const (
+var (
 	ErrPaymentNotFound     = common.Error("err payment not found")
 	ErrPaymentAlreadyExist = common.Error("err payment already exist")
 	ErrPaymentInstallment  = common.Error("err payment insufficient installments")
@@ -20,4 +20,16 @@ type Payment struct {
 	PaidAt    *time.Time `db:"paid_at" json:"paid_at"`
 	CreatedAt time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at" json:"updated_at"`
+}
+
+type RespPayment struct {
+	Payment
+	Deliquent       bool `json:"deliquent"`
+	DeliquentAmount int  `json:"deliquent_amount"`
+}
+
+type PaymentStatus struct {
+	IsDelinquent  bool  `json:"is_deliquent"`
+	DeliquentWeek []int `json:"deliquent_week"`
+	Outstanding   int   `json:"outstanding"`
 }
