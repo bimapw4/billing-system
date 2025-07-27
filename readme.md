@@ -1,4 +1,4 @@
-# billing & Payroll Management API
+# Billing Loan System
 
 ### 1. Run the Project
 Without Docker
@@ -19,16 +19,10 @@ docker-compose up
 
 * SQLX + PostgreSQL
 
-* JWT v4
-
-* Gomock + Testify (Testing)
-
 * Docker / Docker Compose
 
-### 📄 3.  API Logging
-All API requests and responses are logged to the audit log table using auditlog middleware.
 
-### 4. Env Example
+### 3. Env Example
 ```
 APP_NAME = Payroll Payslip
 PORT = 8083
