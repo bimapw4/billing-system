@@ -22,7 +22,7 @@ type handler struct {
 	business business.Business
 }
 
-func NewAdminHandler(business business.Business) Handler {
+func NewBorrowerHandler(business business.Business) Handler {
 	return &handler{
 		business: business,
 	}
