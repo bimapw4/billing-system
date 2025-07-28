@@ -6,7 +6,6 @@ import (
 	"billing/internal/repositories"
 	"billing/pkg/meta"
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,9 +39,14 @@ func (b *business) Create(ctx context.Context, payload *entity.Loan) (*presentat
 		UpdatedAt:    time.Now(),
 	}
 
+	totalToPay := data.Principal + int((float64(data.Principal) * (float64(data.InterestRate) / 100)))
+
+	weeklyPayment := totalToPay / data.TotalWeeks
+
+	data.WeeklyPayment = weeklyPayment
+
 	err := b.repo.Loans.Create(ctx, &data)
 	if err != nil {
-		fmt.Println("errr ==", err)
 		return nil, err
 	}
 

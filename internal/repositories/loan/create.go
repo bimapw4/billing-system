@@ -40,7 +40,7 @@ func (r *repo) Create(ctx context.Context, input *presentations.Loan) error {
 		return r.translateError(err)
 	}
 
-	paymentInsertQuery := `INSERT INTO payments (id, loan_id, week, is_paid, paid_at) VALUES ($1, $2, $3, false, NULL)`
+	paymentInsertQuery := `INSERT INTO payments (id, loan_id, week, paid, is_paid, paid_at) VALUES ($1, $2, $3, $4, false, NULL)`
 	stmt, err := tx.PrepareContext(ctx, paymentInsertQuery)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (r *repo) Create(ctx context.Context, input *presentations.Loan) error {
 	defer stmt.Close()
 
 	for week := 1; week <= input.TotalWeeks; week++ {
-		_, err := stmt.ExecContext(ctx, uuid.NewString(), input.ID, week)
+		_, err := stmt.ExecContext(ctx, uuid.NewString(), input.ID, week, input.WeeklyPayment)
 		if err != nil {
 			return err
 		}

@@ -17,7 +17,7 @@ func (r *repo) List(ctx context.Context, m *meta.Params) ([]presentations.Paymen
 	if err != nil {
 		return nil, err
 	}
-	query := `SELECT * FROM payments ORDER BY created_at DESC OFFSET :offset LIMIT :limit`
+	query := `SELECT * FROM payments where 1=1 ORDER BY created_at DESC OFFSET :offset LIMIT :limit`
 
 	query = strings.Replace(
 		query,
